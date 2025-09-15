@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Master - Card Matching Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>Loading Game</h2>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <p class="loading-text">Preparing your gaming experience...</p>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-brain"></i> Memory Master
+            </div>
+            <div class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#" class="nav-link" id="home-link">Home</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link">Difficulty <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="#" data-level="easy">Easy (4×4)</a>
+                        <a href="#" data-level="medium">Medium (4×6)</a>
+                        <a href="#" data-level="hard">Hard (6×6)</a>
+                    </div>
+                </div>
+                <a href="#" class="nav-link" id="multiplayer-link">Multiplayer</a>
+                <a href="#" class="nav-link" id="achievements-link">Achievements</a>
+                <a href="#" class="nav-link" id="collection-link">Collection</a>
+                <a href="#" class="nav-link" id="daily-challenge-link">Daily Challenge</a>
+                <a href="#" class="nav-link" id="settings-link">Settings</a>
+                <a href="#" class="nav-link" id="how-to-play-link">How to Play</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Game Container -->
+    <div class="container">
+        <header>
+            <h1>Memory Master</h1>
+            <p>Match pairs of cards to win. Try to complete with the fewest moves!</p>
+        </header>
+        
+        <!-- Game Mode Selector -->
+        <div class="game-mode-selector">
+            <button class="mode-btn active" data-mode="single">Single Player</button>
+            <button class="mode-btn" data-mode="multi">Multiplayer</button>
+        </div>
+        
+        <!-- Daily Challenge Info -->
+        <div class="daily-challenge" id="daily-challenge">
+            <div class="challenge-header">
+                <i class="fas fa-calendar-star"></i>
+                <h3>Daily Challenge</h3>
+                <span class="close-challenge" id="close-challenge">&times;</span>
+            </div>
+            <div class="challenge-content">
+                <p>Find all pairs in under 2 minutes with less than 20 moves!</p>
+                <div class="reward">Reward: <span>50</span> <i class="fas fa-coins"></i></div>
+                <button class="btn btn-challenge" id="start-challenge">
+                    <i class="fas fa-play"></i> Start Challenge
+                </button>
+            </div>
+        </div>
+        
+        <!-- Player Stats -->
+        <div class="player-stats" id="player-stats">
+            <div class="player active" data-player="1">
+                <h3>Player 1</h3>
+                <div class="score">Score: <span>0</span></div>
+                <div class="matches">Matches: <span>0</span></div>
+            </div>
+            <div class="player" data-player="2">
+                <h3>Player 2</h3>
+                <div class="score">Score: <span>0</span></div>
+                <div class="matches">Matches: <span>0</span></div>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <i class="fas fa-shoe-prints"></i>
+                <span>Moves:</span>
+                <span id="moves">0</span>
+            </div>
+            <div class="stat">
+                <i class="fas fa-handshake"></i>
+                <span>Matches:</span>
+                <span id="matches">0</span>
+            </div>
+            <div class="stat">
+                <i class="fas fa-clock"></i>
+                <span>Time:</span>
+                <span id="timer">00:00</span>
+            </div>
+        </div>
+        
+        <div class="game-board" id="game-board">
+            <!-- Cards will be generated by JavaScript -->
+        </div>
+        
+        <div class="controls">
+            <button id="reset-btn" class="btn">
+                <i class="fas fa-redo"></i> Reset Game
+            </button>
+            <button id="theme-btn" class="btn">
+                <i class="fas fa-palette"></i> Change Theme
+            </button>
+            <button id="sound-toggle" class="btn">
+                <i class="fas fa-volume-up"></i> Sound
+            </button>
+        </div>
+    </div>
+
+    <!-- Win Modal -->
+    <div class="win-modal" id="win-modal">
+        <div class="win-content">
+            <div class="confetti"></div>
+            <h2>Congratulations!</h2>
+            <p>You've matched all the cards!</p>
+            <div class="win-stats">
+                <p>Time: <span id="win-time">00:00</span></p>
+                <p>Moves: <span id="win-moves">0</span></p>
+                <p>Winner: <span id="winner">Player 1</span></p>
+            </div>
+            <div class="achievement-unlocked" id="achievement-unlocked">
+                <i class="fas fa-trophy"></i>
+                <p>New achievement unlocked!</p>
+            </div>
+            <div class="share-buttons">
+                <button class="btn-share" id="share-twitter">
+                    <i class="fab fa-twitter"></i> Twitter
+                </button>
+                <button class="btn-share" id="share-facebook">
+                    <i class="fab fa-facebook"></i> Facebook
+                </button>
+            </div>
+            <button id="play-again" class="btn">
+                <i class="fas fa-play"></i> Play Again
+            </button>
+        </div>
+    </div>
+
+    <!-- How to Play Modal -->
+    <div class="modal" id="how-to-play-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>How to Play</h2>
+            <div class="instructions">
+                <div class="instruction-step">
+                    <div class="step-number">1</div>
+                    <p>The goal is to find all matching pairs of cards.</p>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">2</div>
+                    <p>Click on a card to flip it over and reveal its symbol.</p>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">3</div>
+                    <p>Click on another card to find its match.</p>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">4</div>
+                    <p>If the two cards match, they will stay face up.</p>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">5</div>
+                    <p>If they don't match, they will flip back over.</p>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">6</div>
+                    <p>In multiplayer mode, players take turns trying to find matches.</p>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">7</div>
+                    <p>The player with the most matches wins!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements Modal -->
+    <div class="modal" id="achievements-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Achievements</h2>
+            <div class="achievements-list" id="achievements-list">
+                <!-- Achievements will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Settings</h2>
+            <div class="settings-options">
+                <div class="setting">
+                    <label for="sound-toggle-setting">Sound Effects</label>
+                    <label class="switch">
+                        <input type="checkbox" id="sound-toggle-setting" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting">
+                    <label for="music-toggle">Background Music</label>
+                    <label class="switch">
+                        <input type="checkbox" id="music-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting">
+                    <label for="animations-toggle">Animations</label>
+                    <label class="switch">
+                        <input type="checkbox" id="animations-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting">
+                    <label for="card-back">Card Back Design</label>
+                    <select id="card-back">
+                        <option value="default">Default</option>
+                        <option value="space">Space</option>
+                        <option value="wood">Wood</option>
+                        <option value="marble">Marble</option>
+                    </select>
+                </div>
+                <div class="setting">
+                    <label for="difficulty">Default Difficulty</label>
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collection Modal -->
+    <div class="modal" id="collection-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Card Collection</h2>
+            <div class="collection-grid" id="collection-grid">
+                <!-- Collection items will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Session Stats Modal -->
+    <div class="modal" id="stats-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Session Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>Games Played</h3>
+                    <p id="games-played">0</p>
+                </div>
+                <div class="stat-item">
+                    <h3>Total Matches</h3>
+                    <p id="total-matches">0</p>
+                </div>
+                <div class="stat-item">
+                    <h3>Best Time</h3>
+                    <p id="best-time">00:00</p>
+                </div>
+                <div class="stat-item">
+                    <h3>Best Score</h3>
+                    <p id="best-score">0</p>
+                </div>
+            </div>
+            <button class="btn" id="share-stats">
+                <i class="fas fa-share-alt"></i> Share Statistics
+            </button>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="flip-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-card-flip-1932.mp3" preload="auto"></audio>
+    <audio id="match-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3" preload="auto"></audio>
+    <audio id="win-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3" preload="auto"></audio>
+    <audio id="background-music" src="https://assets.mixkit.co/music/preview/mixkit-games-worldbeat-466.mp3" preload="auto" loop></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
